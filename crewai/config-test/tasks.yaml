@@ -1,0 +1,21 @@
+data_loader_task:
+  description: >
+    load the csv files for data analysis
+  expected_output: >
+    data loaded in  tubularformat or to be used for python analysis
+
+data_analysis_task:
+  description: >
+    Generate a full detail statistical analsys of the loaded data perhaps with some descirption and annotation etc
+  expected_output: >
+    complete statstical analysis of the loaded data
+
+
+
+
+
+
+
+
+
+
