@@ -29,9 +29,10 @@ ENV CONDA_DEFAULT_ENV=dev
 ENV PATH=$CONDA_DIR/envs/$CONDA_DEFAULT_ENV/bin:$PATH
 
 # Install Python packages
-COPY requirements.txt /tmp/requirements.txt
-RUN conda run -n dev pip install --no-cache-dir -r /tmp/requirements.txt \
-    && rm /tmp/requirements.txt
+WORKDIR /workspace
+COPY requirements.txt /workspace/requirements.txt
+RUN conda run -n dev pip install --no-cache-dir -r /workspace/requirements.txt \
+    && rm /workspace/requirements.txt
     
 # Activate Conda in every shell
 RUN echo "conda init" >> ~/.bashrc
