@@ -30,7 +30,7 @@ ENV PATH=$CONDA_DIR/envs/$CONDA_DEFAULT_ENV/bin:$PATH
 
 # Install Python packages
 WORKDIR /workspace
-COPY requirements.txt /workspace/requirements.txt
+COPY ../requirements.txt /workspace/requirements.txt
 RUN conda run -n dev pip install --no-cache-dir -r /workspace/requirements.txt \
     && rm /workspace/requirements.txt
     
