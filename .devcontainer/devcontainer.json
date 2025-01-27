@@ -1,9 +1,11 @@
 {
     "name": "Azure Developer CLI",
+    // The Dockerfile below handles Python + Conda, so no need for "VARIANT" anymore.
     "build": {
         "dockerfile": "Dockerfile"
     },
     "features": {
+        // Remove Python feature because we’re installing our own via Conda in the Dockerfile
         "ghcr.io/devcontainers/features/node:1": {
             "version": "16",
             "nodeGypDependencies": false
@@ -17,15 +19,23 @@
                 "ms-azuretools.azure-dev",
                 "ms-azuretools.vscode-bicep",
                 "ms-python.python",
-                "ms-toolsai.jupyter"
+                "ms-toolsai.jupyter" // <-- The correct Jupyter extension ID
             ]
         }
     },
-    "forwardPorts": [5000],
+    "forwardPorts": [
+        5000
+    ],
+    // You can adjust the postCreateCommand to verify your Python environment quickly
+    "postCreateCommand": "conda activate dev && python --version && which python",
+
     "remoteUser": "vscode",
+
     "hostRequirements": {
         "memory": "8gb"
     },
+
+    // Docker-in-Docker privileges (only if you need Docker CLI in this container)
     "runArgs": [
         "--privileged",
         "--cap-add=NET_ADMIN",
