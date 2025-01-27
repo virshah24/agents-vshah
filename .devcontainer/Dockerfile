@@ -1,43 +1,38 @@
-# Start from the devcontainers Python image for convenience
+# Use a more specific base image with pre-installed conda
 FROM mcr.microsoft.com/devcontainers/python:1-3.12
 
-# Switch off interactive front-end
-ENV DEBIAN_FRONTEND=noninteractive
+# Install system dependencies in one layer
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y wget bzip2 && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/*
 
-# [Optional] Install Miniconda, or skip if you want only pip + venv
-RUN apt-get update && apt-get install -y wget bzip2 \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
-    #
-    # Download & Install Miniconda
-    && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh \
-    && bash /tmp/miniconda.sh -b -p /opt/conda \
-    && rm /tmp/miniconda.sh
+# Install Azure Developer CLI
+RUN curl -fsSL https://aka.ms/install-azd.sh | bash
 
+# Install Mambaforge for faster conda operations
 ENV CONDA_DIR=/opt/conda
-ENV PATH="$CONDA_DIR/bin:$PATH"
+RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O /tmp/mambaforge.sh && \
+    bash /tmp/mambaforge.sh -b -p ${CONDA_DIR} && \
+    rm /tmp/mambaforge.sh && \
+    ${CONDA_DIR}/bin/conda clean -ya
 
-# Initialize Conda for bash
-RUN conda init bash
+# Set up conda environment and install packages
+COPY environment.yml /tmp/environment.yml
+RUN ${CONDA_DIR}/bin/mamba env create -f /tmp/environment.yml && \
+    ${CONDA_DIR}/bin/mamba clean -ya && \
+    rm /tmp/environment.yml
 
-# Create and activate a new environment named "dev" with Python 3.12
-RUN conda create -y -n dev python=3.12 && conda clean -ya
-ENV CONDA_DEFAULT_ENV=dev
-ENV PATH=$CONDA_DIR/envs/$CONDA_DEFAULT_ENV/bin:$PATH
+# Register Jupyter kernel and set permissions
+RUN ${CONDA_DIR}/envs/dev/bin/python -m ipykernel install --user --name dev --display-name "Python (dev)" && \
+    chown -R vscode:${CONDA_DIR} ${CONDA_DIR} && \
+    chmod -R 775 ${CONDA_DIR}
 
-# Copy in your requirements
+# Activate environment in shell
+ENV PATH="${CONDA_DIR}/envs/dev/bin:${PATH}"
+RUN echo "conda activate dev" >> /home/vscode/.bashrc
+
+# Ensure proper permissions
+USER vscode
 WORKDIR /workspace
-COPY requirements.txt .
-
-# Install your Python packages in the "dev" conda environment
-RUN conda run -n dev pip install -r requirements.txt --no-cache-dir
-
-# Install a named kernel so Jupyter sees "Python (dev)" if you want
-RUN conda run -n dev python -m ipykernel install --user --name dev --display-name "Python (dev)"
-
-# Force conda activate for all newly launched shells
-RUN echo "conda activate dev" >> ~/.bashrc
-
-# Clean up
-RUN apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-# Done!

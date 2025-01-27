@@ -1,42 +1,35 @@
 {
-    "name": "Minimal Python Dev Container",
+    "name": "Azure Developer CLI",
     "build": {
         "dockerfile": "Dockerfile"
     },
     "features": {
-        // No Azure CLI, no Node, no PowerShell. 
-        // Just comment out or remove all of them:
-        // "ghcr.io/devcontainers/features/azure-cli:1.0.8": {},
-        // "ghcr.io/devcontainers/features/powershell:1.1.0": {},
-        // "ghcr.io/devcontainers/features/node:1": {}
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "16",
+            "nodeGypDependencies": false
+        },
+        "ghcr.io/devcontainers/features/powershell:1.1.0": {},
+        "ghcr.io/devcontainers/features/azure-cli:1.0.8": {}
     },
     "customizations": {
         "vscode": {
             "extensions": [
+                "ms-azuretools.azure-dev",
+                "ms-azuretools.vscode-bicep",
                 "ms-python.python",
                 "ms-toolsai.jupyter"
             ]
         }
     },
-    // No need to forward any ports, or only forward if your notebook needs it.
-    // "forwardPorts": [ 5000 ],
-    
-    // After building, we can do a quick check:
-    "postCreateCommand": "conda activate dev && python --version && which python",
-    
-    // Keep the default user
+    "forwardPorts": [5000],
     "remoteUser": "vscode",
-    
-    // If you don’t need Docker in Docker, you can remove these runArgs
-    // "runArgs": [
-    //     "--privileged",
-    //     "--cap-add=NET_ADMIN",
-    //     "--security-opt=apparmor=unconfined",
-    //     "--security-opt=seccomp=unconfined"
-    // ],
-
-    // And you can remove hostRequirements if you want to skip the memory requirement
-    // "hostRequirements": {
-    //     "memory": "8gb"
-    // }
+    "hostRequirements": {
+        "memory": "8gb"
+    },
+    "runArgs": [
+        "--privileged",
+        "--cap-add=NET_ADMIN",
+        "--security-opt=apparmor=unconfined",
+        "--security-opt=seccomp=unconfined"
+    ]
 }
