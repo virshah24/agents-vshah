@@ -1,3 +1,4 @@
 .env
 crew/.env
 __pycache__/
+langgraph/
