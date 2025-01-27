@@ -1,0 +1,22 @@
+name: dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+    - ipykernel
+    - openai
+    - langchain
+    - langgraph
+    - llama-index
+    - pandas
+    - crewai
+    - python-dotenv
+    - crewai_tools==0.25.8
+    - langtrace-python-sdk
+    - botocore
+    - langchain_community
+    - langchain_experimental
+    - matplotlib
