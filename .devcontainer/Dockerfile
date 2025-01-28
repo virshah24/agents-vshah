@@ -23,7 +23,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
 ENV PATH="$CONDA_DIR/bin:$PATH"
 
 # Set up Conda environment
-RUN conda create -y -n dev python=3.12 \
+RUN conda create -y -n dev python=3.11 \
     && conda clean -ya
 
 # Set Conda default environment
