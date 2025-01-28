@@ -2,3 +2,4 @@
 crew/.env
 __pycache__/
 langgraph/
+.cache/

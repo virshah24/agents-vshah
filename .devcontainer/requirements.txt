@@ -11,4 +11,7 @@ langtrace-python-sdk
 botocore
 langchain_community
 langchain_experimental
-matplotlib 
+matplotlib
+autogen
+autogen-agentchat~=0.2
+seaborn
