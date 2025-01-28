@@ -3,3 +3,5 @@ crew/.env
 __pycache__/
 langgraph/
 .cache/
+"AutoGen/data analysis/OAI_CONFIG_LIST"
+stock_analysis.ipynb
