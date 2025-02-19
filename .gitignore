@@ -1,7 +1,5 @@
 .env
-crew/.env
 __pycache__/
-langgraph/
 .cache/
-AutoGen/data analysis/OAI_CONFIG_LIST
 crewai/stock_analysis.ipynb
+/db
